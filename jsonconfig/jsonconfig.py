@@ -36,7 +36,6 @@ class JsonConfig:
                 self.file = file
                 self.data = json.loads(f.read())
         except Exception as e:
-            print(e)
             self.data = {}
             pass
 
@@ -44,7 +43,6 @@ class JsonConfig:
         if file is not None:
             self.file = file
         if self.file is not None:
-            print(self.data)
             with open(self.file, "w+") as outfile:
                 json.dump(self.data, outfile, indent=4, sort_keys=True)
 
