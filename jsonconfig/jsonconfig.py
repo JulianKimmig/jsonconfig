@@ -18,6 +18,7 @@ class JsonConfig:
 
     def get(self, *args, default=None):
         d = self.data
+        args=[str(arg) for arg in args]
         for arg in args[:-1]:
             arg =  str(arg)
             if arg not in d:
