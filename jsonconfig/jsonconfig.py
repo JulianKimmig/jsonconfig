@@ -58,13 +58,12 @@ class JsonConfig:
                 d[arg] = {}
             d = d[arg]
 
-        preval=None
         new = False
         if args[-1] not in d:
             new = True
+            d[args[-1]] = None
         elif d[args[-1]] != value:
             new = True
-            d[args[-1]] = None
         preval = d[args[-1]]
         d[args[-1]] = value
 
