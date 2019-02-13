@@ -1,5 +1,6 @@
 import json
 
+
 class JsonConfig:
     def __init__(self, file=None, data=None):
         self.file = None
@@ -18,6 +19,7 @@ class JsonConfig:
     def get(self, *args, default=None):
         d = self.data
         for arg in args[:-1]:
+            arg =  str(arg)
             if arg not in d:
                 d[arg] = {}
             d = d[arg]
@@ -41,6 +43,7 @@ class JsonConfig:
         if file is not None:
             self.file = file
         if self.file is not None:
+            print(self.data)
             with open(self.file, "w+") as outfile:
                 json.dump(self.data, outfile, indent=4, sort_keys=True)
 
@@ -50,19 +53,24 @@ class JsonConfig:
     def put(self, *args, value, autosave=True):
         d = self.data
         for arg in args[:-1]:
+            arg=str(arg)
             if arg not in d:
                 d[arg] = {}
             d = d[arg]
 
+        preval=None
         new = False
         if args[-1] not in d:
             new = True
         elif d[args[-1]] != value:
             new = True
+            d[args[-1]] = None
+        preval = d[args[-1]]
         d[args[-1]] = value
 
-        if self.autosave and autosave:
-            self.save()
+        if new or (preval != value):
+            if self.autosave and autosave:
+                self.save()
 
         return value, new
 
