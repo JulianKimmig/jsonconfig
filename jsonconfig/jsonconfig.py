@@ -39,11 +39,21 @@ class JsonConfig:
             self.data = {}
             pass
 
+    def stringify_keys(self,diction=None):
+        if diction is None:
+            diction = self.data
+
+        for k in list(diction.keys()):
+            if isinstance(diction[k],dict):
+                self.stringify_keys(diction=diction[k])
+            diction[str(k)] = diction.pop(k)
+
     def save(self, file=None):
         if file is not None:
             self.file = file
         if self.file is not None:
             with open(self.file, "w+") as outfile:
+                self.stringify_keys()
                 json.dump(self.data, outfile, indent=4, sort_keys=True)
 
     def to_json(self):
