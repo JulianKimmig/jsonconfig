@@ -2,7 +2,7 @@ import json
 
 
 class JsonConfig:
-    def __init__(self, file=None, data=None):
+    def __init__(self, file=None, data=None,createfile=False):
         self.file = None
         self.autosave = False
         if data is not None:
@@ -14,7 +14,7 @@ class JsonConfig:
             data = {}
         self.data = data
         if file is not None:
-            self.read(file)
+            self.read(file,createfile=createfile)
 
     def get(self, *args, default=None):
         d = self.data
@@ -30,14 +30,18 @@ class JsonConfig:
 
         return d[args[-1]]
 
-    def read(self, file):
+    def read(self, file,createfile=False):
         try:
             with open(file) as f:
                 self.file = file
                 self.data = json.loads(f.read())
         except Exception as e:
-            self.data = {}
-            pass
+            if createfile:
+                with open(file,"w+") as f:
+                    f.write("{}")
+                self.read(file,createfile=False)
+            else:
+                self.data = {}
 
     def stringify_keys(self,diction=None):
         if diction is None:
